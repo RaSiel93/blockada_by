@@ -5,5 +5,9 @@ module Telegram
     def create
       Telegram::ResolveWebhookWorker.perform_async(params.permit!.to_h)
     end
+
+    def index
+      render json: { message: "HELLO" }
+    end
   end
 end

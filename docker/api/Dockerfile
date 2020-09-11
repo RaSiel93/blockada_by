@@ -10,3 +10,5 @@ COPY Gemfile.lock Gemfile.lock
 RUN bundle
 
 COPY . .
+
+# CMD ["/bin/bash"]

@@ -5,25 +5,36 @@ services:
     build:
         context: .
         dockerfile: ./docker/api/Dockerfile
+    image: blockadaby/api
     env_file:
       - .env
     depends_on:
       - db
       - redis
     ports:
-      - 3000:3000
+      - 80:80
     command: bash -c "rails db:migrate && rails s -p 80 -b 0.0.0.0"
   db:
     image: postgres
     env_file:
       - .env
-  nginx:
-    depends_on:
-      - api
-    build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
-    ports:
-      - 80:80
   redis:
     image: redis
+    ports:
+      - 6379:6379
+  sidekiq:
+    image: blockadaby/api
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    depends_on:
+      - redis
+      - db
+    env_file:
+      - .env
+  # nginx:
+  #   depends_on:
+  #     - api
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/nginx/Dockerfile
+  #   ports:
+  #     - 80:80
