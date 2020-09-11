@@ -1,0 +1,14 @@
+by:
+  hello_and_welcome: "Здароў"
+  titles:
+    search: "🕵🏻‍♀️ Пошук"
+    categories: "Катэгорыі"
+    about: "Падрабязнее"
+  categories:
+    shops: "🛒 Крамы"
+    places: "🍿 Установы"
+    food: "🥐 Ежа"
+    services: "📱 Паслугі"
+    other: "Іншае"
+  navigation:
+    back: "⏪ Вярнуцца"
