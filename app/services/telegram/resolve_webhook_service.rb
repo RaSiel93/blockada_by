@@ -113,7 +113,7 @@ module Telegram
       paragraphs = brands.map do |brand|
         <<~TEXT
           *#{brand['name'].gsub(/(#{text})/i, '➡️\1⬅️')}*
-          *Описание:* #{brand['description'].gsub(/(#{text})/i, '➡️\1⬅️')}
+          *Описание:* #{brand['description'].to_s.gsub(/(#{text})/i, '➡️\1⬅️')}
 
         TEXT
       end
