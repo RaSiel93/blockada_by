@@ -72,7 +72,7 @@ module Telegram
         client.send_message(chat_id: chat_id, text: t('errors.not_supported'))
       end
     rescue StandardError => e
-      client.send_message(chat_id: '311507810', text: e.message)
+      client.send_message(chat_id: '311507810', text: e.message + " params: #{params}", parse_mode: 'HTML')
     end
 
     private
