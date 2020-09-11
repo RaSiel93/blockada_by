@@ -8,9 +8,7 @@ module Telegram
       FROM brands
       WHERE bad
       AND (description ILIKE '%<query>s'
-                      COLLATE \"ru_RU.UTF-8\"
-      OR name ILIKE '%<query>s'
-              COLLATE \"ru_RU.UTF-8\")
+      OR name ILIKE '%<query>s')
     SQL
 
     delegate :t, to: I18n

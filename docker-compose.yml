@@ -13,8 +13,11 @@ services:
       - redis
     ports:
       - 80:80
-    command: bash -c "rails db:migrate && rails s -p 80 -b 0.0.0.0"
+    command: bash -c "rm -rf /app/tmp/pids/server.pid && rails db:migrate && rails s -p 80 -b 0.0.0.0"
   db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
     image: postgres
     env_file:
       - .env
