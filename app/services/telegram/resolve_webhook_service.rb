@@ -80,7 +80,7 @@ module Telegram
     def send_main_menu(chat_id)
       client.send_message(
         chat_id: chat_id,
-        text: t("hello_and_welcome"),
+        text: t("messages.hello"),
         reply_markup: {
           keyboard: [
             [{ text: t("titles.search") }],
