@@ -12,7 +12,7 @@ services:
       - redis
     ports:
       - 3000:3000
-    command: bash -c "bundle exec rails db:migrate && bundle exec rails s -p 80 -b 0.0.0.0"
+    command: bash -c "rails db:migrate && rails s -p 80 -b 0.0.0.0"
   db:
     image: postgres
     env_file:
