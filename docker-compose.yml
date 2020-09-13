@@ -14,6 +14,7 @@ services:
     ports:
       - 80:80
     command: bash -c "rm -rf /app/tmp/pids/server.pid && rails db:migrate && rails s -p 80 -b 0.0.0.0"
+    restart: always
   db:
     build:
       context: .
@@ -21,10 +22,12 @@ services:
     image: postgres
     env_file:
       - .env
+    restart: always
   redis:
     image: redis
     ports:
       - 6379:6379
+    restart: always
   sidekiq:
     image: blockadaby/api
     command: bundle exec sidekiq -C config/sidekiq.yml
@@ -33,6 +36,7 @@ services:
       - db
     env_file:
       - .env
+    restart: always
   # nginx:
   #   depends_on:
   #     - api
