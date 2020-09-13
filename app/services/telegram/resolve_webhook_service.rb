@@ -3,13 +3,6 @@
 module Telegram
   class ResolveWebhookService < BaseService
     MAX_LENGTH = 4096
-    SEARCH_QUERY = <<~SQL
-      SELECT name, description
-      FROM brands
-      WHERE bad
-      AND (description ILIKE '%<query>s'
-      OR name ILIKE '%<query>s')
-    SQL
 
     delegate :t, to: I18n
 
@@ -107,24 +100,34 @@ module Telegram
     end
 
     def query_brands(text, chat_id)
-      query = format(SEARCH_QUERY, query: "%#{text}%")
-      brands = ActiveRecord::Base.connection.execute(query)
+      words = [text, Translit.convert(text)]
+      query = words.map(&method(:build_query_line)).join(' OR ')
+
+      brands = Brand.where(bad: true).where(query)
 
       paragraphs = brands.map do |brand|
         <<~TEXT
-          *#{brand['name'].gsub(/(#{text})/i, '➡️\1⬅️')}*
-          *Описание:* #{brand['description'].to_s.gsub(/(#{text})/i, '➡️\1⬅️')}
+          *#{select_word_with(brand.name, words)}*
+          *Описание:* #{select_word_with(brand.description.to_s, words)}
 
         TEXT
       end
 
       message_blocks = build_message_blocks(paragraphs)
 
-      message_blocks.each do |text|
-        client.send_message(chat_id: chat_id, text: text)
+      message_blocks.each do |block|
+        client.send_message(chat_id: chat_id, text: block)
       end
 
-      client.send_message(chat_id: chat_id, text: t('errors.not_found')) if message_blocks.filter(&:present?).blank?
+      return if message_blocks.filter(&:present?).present?
+
+      client.send_message(chat_id: chat_id, text: t('errors.not_found'))
+    end
+
+    def select_word_with(text, dictionary, selector = '➡️\1⬅️')
+      dictionary.each_with_object(text) do |word, obj|
+        obj.gsub!(/(#{word})/i, selector)
+      end
     end
 
     def build_message_blocks(paragraphs)
@@ -135,6 +138,10 @@ module Telegram
 
         obj[obj.length - 1] += brand
       end
+    end
+
+    def build_query_line(word)
+      "description ILIKE '%#{word}%' OR name ILIKE '%#{word}%'"
     end
 
     def categories

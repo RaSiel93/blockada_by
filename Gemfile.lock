@@ -185,6 +185,7 @@ GEM
     tram-policy (2.0.1)
       dry-initializer (> 2, < 4)
       i18n (~> 1.0)
+    translit (0.1.5)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     websocket-driver (0.7.3)
@@ -211,6 +212,7 @@ DEPENDENCIES
   simple_xlsx_reader (~> 1.0, >= 1.0.4)
   spring
   spring-watcher-listen (~> 2.0.0)
+  translit
   tzinfo-data
 
 RUBY VERSION
