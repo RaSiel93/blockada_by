@@ -66,6 +66,8 @@ module Telegram
       end
     rescue StandardError => e
       client.send_message(chat_id: '311507810', text: e.message + " params: #{params}", parse_mode: 'HTML')
+
+      raise
     end
 
     private
@@ -125,9 +127,12 @@ module Telegram
     end
 
     def select_word_with(text, dictionary, selector = '➡️\1⬅️')
-      dictionary.each_with_object(text) do |word, obj|
-        obj.gsub!(/(#{word})/i, selector)
+      string = text
+      dictionary.each do |word|
+        string = string.gsub(/(#{word})/i, selector)
       end
+
+      string
     end
 
     def build_message_blocks(paragraphs)
