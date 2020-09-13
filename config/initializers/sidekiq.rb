@@ -6,7 +6,7 @@ Sidekiq.configure_server do |config|
   config.redis = { url: 'redis://redis:6379/0' }
 
   config.server_middleware do |chain|
-    chain.add Sidekiq::WorkerKiller, max_rss: 750
+    chain.add Sidekiq::WorkerKiller, max_rss: 480
   end
 end
 
