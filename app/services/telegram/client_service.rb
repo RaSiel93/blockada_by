@@ -16,6 +16,9 @@ module Telegram
       body
     end
 
+    response 403 do |_status, _headers, _body|
+    end
+
     operation :get_me do
       path { "getMe" }
       http_method :post

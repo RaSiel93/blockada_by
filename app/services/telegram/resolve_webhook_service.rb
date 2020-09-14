@@ -3,6 +3,7 @@
 module Telegram
   class ResolveWebhookService < BaseService
     MAX_LENGTH = 4096
+    QUERY = "description ILIKE ? OR name ILIKE ?"
 
     delegate :t, to: I18n
 
@@ -102,10 +103,10 @@ module Telegram
     end
 
     def query_brands(text, chat_id)
-      words = [text, Translit.convert(text)]
-      query = words.map(&method(:build_query_line)).join(' OR ')
+      words = [text, Translit.convert(text)].map { _1.delete("'") }
+      query = words.map { QUERY }.join(' OR ')
 
-      brands = Brand.where(bad: true).where(query)
+      brands = Brand.where(bad: true).where(query, *words.flat_map { [_1, _1] })
 
       paragraphs = brands.map do |brand|
         <<~TEXT
@@ -143,10 +144,6 @@ module Telegram
 
         obj[obj.length - 1] += brand
       end
-    end
-
-    def build_query_line(word)
-      "description ILIKE '%#{word}%' OR name ILIKE '%#{word}%'"
     end
 
     def categories
