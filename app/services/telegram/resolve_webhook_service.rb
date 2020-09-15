@@ -106,7 +106,7 @@ module Telegram
       words = [text, Translit.convert(text)].map { _1.delete("'") }
       query = words.map { QUERY }.join(' OR ')
 
-      brands = Brand.where(bad: true).where(query, *words.flat_map { [_1, _1] })
+      brands = Brand.where(bad: true).where(query, *words.flat_map { ["%#{_1}%"] * 2 })
 
       paragraphs = brands.map do |brand|
         <<~TEXT
@@ -147,7 +147,10 @@ module Telegram
     end
 
     def categories
-      @categories ||= Category.all
+      @categories ||= Category.joins(:brands)
+			      .having("COUNT(brands.id) > 0")
+                              .group("categories.id")
+                              .where(brands: { bad: true })
     end
 
     def client
