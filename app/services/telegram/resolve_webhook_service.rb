@@ -148,7 +148,7 @@ module Telegram
 
     def categories
       @categories ||= Category.joins(:brands)
-			      .having("COUNT(brands.id) > 0")
+                              .having("COUNT(brands.id) > 0")
                               .group("categories.id")
                               .where(brands: { bad: true })
     end
