@@ -9,9 +9,9 @@ module Repressions
       in { message: { from: { is_bot: true } } }
       in { message: { text: "/start", chat: { id: chat_id } } }
         send_main_menu(chat_id)
-      in { message: { text: message, chat: { id: chat_id }, from: { username: username } } }
+      in { message: { text: message, chat: { id: chat_id }, from: { id: from_id } } }
         client.send_message(chat_id: chat_id, text: 'Дзякуй. Вам хутка напішуць, каб спытаць падрабязней')
-        client.send_message(chat_id: ADMIN_ID, text: "Ад: @#{username}. #{message}.")
+        client.send_message(chat_id: ADMIN_ID, text: "Ад: [author](tg://user?id=#{from_id}). #{message}.")
       end
     rescue StandardError => e
       client.send_message(chat_id: ADMIN_ID, text: e.message + " params: #{params}", parse_mode: 'HTML')
