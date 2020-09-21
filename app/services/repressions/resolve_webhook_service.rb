@@ -27,14 +27,13 @@ module Repressions
     def send_main_menu(chat_id)
       client.send_message(
         chat_id: chat_id,
-        text: 'Што адбылося?',
+        text: 'Што адбылося ў вас, ці ў вашых знаёмых?',
         reply_markup: {
           keyboard: [
-            [{ text: 'Затрыманне' }],
-            [{ text: 'Пратакол' }],
-            [{ text: 'Суд' }],
-            [{ text: 'Ператрус' }],
-            [{ text: 'Позва' }]
+            [{ text: 'Пратакол' }, { text: 'Затрыманне' }],
+            [{ text: 'Позва' }, { text: 'Суд' }],
+            [{ text: 'Ператрус' }, { text: 'Звальненне' }],
+            [{ text: 'Пагроза дзяцьмі' }, { text: 'Іншае' }]
           ],
           resize_keyboard: true
         }
